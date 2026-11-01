@@ -1036,7 +1036,7 @@ a {
   background: #09090b;
   font: inherit;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 400;
 }
 .status-select.status-offen { color: #4ade80; }
 .status-select.status-in-bearbeitung { color: #facc15; }
