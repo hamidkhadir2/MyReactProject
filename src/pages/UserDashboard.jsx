@@ -1,4 +1,3 @@
-//HAmidkhadir
 import { useState } from 'react'
 
 function UserDashboard({ tickets, setTickets }) {
