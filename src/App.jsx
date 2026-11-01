@@ -57,7 +57,7 @@ function App() {
 
       {/* Die Startseite leitet automatisch zum User-Dashboard weiter. */}
       <Routes>
-        <Route path="/" element={<Navigate to="/user" replace />} />
+        <Route path="*" element={<Navigate to="/user" replace />} />
         <Route
           path="/user"
           element={<UserDashboard tickets={tickets} setTickets={setTickets} />}
