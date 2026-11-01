@@ -986,3 +986,88 @@ a {
     white-space: normal;
   }
 }
+
+/* Statusfarben und Admin-Ticketlayout */
+.ticket-search {
+  display: block;
+  width: min(100%, 360px);
+  margin: 0 0 22px;
+  padding: 11px 13px;
+  border: 1px solid #3f3f46;
+  border-radius: 8px;
+  background: #09090b;
+  color: #e5e7eb;
+  font: inherit;
+  font-size: 12px;
+}
+.ticket-search::placeholder { color: #71717a; }
+.ticket-search:focus {
+  outline: 1px solid #60a5fa;
+  border-color: #60a5fa;
+}
+.status-text { font-weight: 800; }
+.status-offen { color: #4ade80 !important; }
+.status-in-bearbeitung { color: #facc15 !important; }
+.status-geschlossen { color: #f87171 !important; }
+.admin-ticket-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+.admin-ticket-meta .ticket-info { flex: 1; min-width: 0; }
+.admin-status-field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 7px;
+  flex-shrink: 0;
+}
+.admin-status-field label {
+  color: #d4d4d8;
+  font-size: 11px;
+  font-weight: 700;
+}
+.status-select {
+  max-width: 100%;
+  padding: 8px 10px;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  background: #09090b;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+}
+.status-select.status-offen { color: #4ade80; }
+.status-select.status-in-bearbeitung { color: #facc15; }
+.status-select.status-geschlossen { color: #f87171; }
+.ticket-card .danger-button {
+  transition: background 0.35s ease, border-color 0.35s ease, color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+}
+.ticket-card .danger-button-closed { animation: closedDeletePulse 2.8s ease-in-out infinite; }
+.ticket-card .danger-button-closed:hover {
+  animation-play-state: paused;
+  transform: translateY(-2px);
+  box-shadow: 0 0 14px #ef444455;
+}
+@keyframes closedDeletePulse {
+  0%, 100% {
+    color: #fecaca;
+    border-color: #ef444480;
+    background: #7f1d1d35;
+    box-shadow: 0 0 0 #ef444400;
+  }
+  50% {
+    color: #ffffff;
+    border-color: #f87171;
+    background: #b91c1c;
+    box-shadow: 0 0 12px #ef444455;
+  }
+}
+@media (max-width: 700px) {
+  .admin-ticket-meta { align-items: flex-start; flex-direction: column; }
+  .admin-status-field { align-items: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticket-card .danger-button-closed { animation: none; }
+}
