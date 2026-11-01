@@ -2,14 +2,7 @@ import { useState } from 'react'
 
 function AdminDashboard({ tickets, setTickets }) {
   const [search, setSearch] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('Alle Kategorien')
-  const [categoryMenuOpen, setCategoryMenuOpen] = useState(false)
-
-  const categories = [...new Set(tickets.map((ticket) => ticket.category).filter(Boolean))]
-  const categoryOptions = ['Alle Kategorien', ...categories].filter((category) =>
-    category.toLowerCase().includes(search.trim().toLowerCase())
-  )
-
+  // Aktualisiert den Status eines Tickets, ohne die übrigen Ticketdaten zu verändern.
   function handleStatusChange(id, newStatus) {
     setTickets((previousTickets) =>
       previousTickets.map((ticket) =>
@@ -18,16 +11,11 @@ function AdminDashboard({ tickets, setTickets }) {
     )
   }
 
-  const filteredTickets = tickets.filter((ticket) => {
-    const searchTerm = search.trim().toLowerCase()
-    const title = (ticket.title ?? '').toLowerCase()
-    const category = (ticket.category ?? '').toLowerCase()
-    const matchesSearch = title.includes(searchTerm) || category.includes(searchTerm)
-    const matchesCategory =
-      selectedCategory === 'Alle Kategorien' || ticket.category === selectedCategory
-
-    return matchesSearch && matchesCategory
-  })
+  // Sucht den Text an jeder Stelle im Titel; Groß-/Kleinschreibung wird ignoriert.
+  const searchTerm = search.trim().toLowerCase()
+  const filteredTickets = tickets.filter((ticket) =>
+    (ticket.title ?? '').toLowerCase().includes(searchTerm)
+  )
 
   return (
     <main className="main-content">
@@ -50,52 +38,15 @@ function AdminDashboard({ tickets, setTickets }) {
           <span className="ticket-count">{tickets.length} Tickets</span>
         </div>
 
-        <div className="ticket-search-combobox">
-          <input
-            className="ticket-search"
-            type="text"
-            role="combobox"
-            aria-label="Tickets suchen oder Kategorie auswählen"
-            aria-expanded={categoryMenuOpen}
-            aria-controls="ticket-category-options"
-            placeholder="Ticket suchen oder Kategorie wählen..."
-            value={search || (selectedCategory !== 'Alle Kategorien' ? selectedCategory : '')}
-            onFocus={() => setCategoryMenuOpen(true)}
-            onChange={(event) => {
-              setSearch(event.target.value)
-              setSelectedCategory('Alle Kategorien')
-              setCategoryMenuOpen(true)
-            }}
-            onKeyDown={(event) => {
-              if (event.key === 'Escape') setCategoryMenuOpen(false)
-            }}
-          />
-          {categoryMenuOpen && (
-            <div className="ticket-category-options" id="ticket-category-options" role="listbox">
-              {categoryOptions.length > 0 ? (
-                categoryOptions.map((category) => (
-                  <button
-                    type="button"
-                    className="ticket-category-option"
-                    key={category}
-                    role="option"
-                    aria-selected={selectedCategory === category}
-                    onMouseDown={(event) => event.preventDefault()}
-                    onClick={() => {
-                      setSelectedCategory(category)
-                      setSearch('')
-                      setCategoryMenuOpen(false)
-                    }}
-                  >
-                    {category}
-                  </button>
-                ))
-              ) : (
-                <p className="ticket-category-empty">Keine passende Kategorie</p>
-              )}
-            </div>
-          )}
-        </div>
+        {/* Einfaches Suchfeld: Es wird nur nach dem Ticket-Titel gesucht. */}
+        <input
+          className="ticket-search"
+          type="text"
+          aria-label="Tickets nach Titel suchen"
+          placeholder="Tickets suchen..."
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+        />
 
         {filteredTickets.length === 0 ? (
           <p className="welcome-description">Keine Tickets gefunden.</p>
