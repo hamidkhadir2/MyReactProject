@@ -1,8 +1,10 @@
 import { useState } from 'react'
 
 function AdminDashboard({ tickets, setTickets }) {
+  // Der Suchtext wird über React-State kontrolliert.
   const [search, setSearch] = useState('')
-  // Aktualisiert den Status eines Tickets, ohne die übrigen Ticketdaten zu verändern.
+
+  // Ändert den Status eines Tickets und lässt alle anderen Daten unverändert.
   function handleStatusChange(id, newStatus) {
     setTickets((previousTickets) =>
       previousTickets.map((ticket) =>
@@ -11,7 +13,7 @@ function AdminDashboard({ tickets, setTickets }) {
     )
   }
 
-  // Sucht den Text an jeder Stelle im Titel; Groß-/Kleinschreibung wird ignoriert.
+  // Sucht an jeder Stelle im Titel; Groß-/Kleinschreibung wird ignoriert.
   const searchTerm = search.trim().toLowerCase()
   const filteredTickets = tickets.filter((ticket) =>
     (ticket.title ?? '').toLowerCase().includes(searchTerm)
@@ -38,7 +40,7 @@ function AdminDashboard({ tickets, setTickets }) {
           <span className="ticket-count">{tickets.length} Tickets</span>
         </div>
 
-        {/* Einfaches Suchfeld: Es wird nur nach dem Ticket-Titel gesucht. */}
+        {/* Ein einfaches Textfeld zum Suchen nach dem Ticket-Titel. */}
         <input
           className="ticket-search"
           type="text"
@@ -52,40 +54,53 @@ function AdminDashboard({ tickets, setTickets }) {
           <p className="welcome-description">Keine Tickets gefunden.</p>
         ) : (
           <div className="ticket-list">
-            {filteredTickets.map((ticket) => (
-              <article className="ticket-card" key={ticket.id}>
-                <h3>{ticket.title}</h3>
+            {filteredTickets.map((ticket) => {
+              const statusClass = ticket.status
+                .replaceAll(' ', '-')
+                .toLowerCase()
 
-                <div className="admin-ticket-meta">
-                  <div className="ticket-info">
-                    <p><strong>Kategorie:</strong> {ticket.category}</p>
-                    <p><strong>Priorität:</strong> {ticket.priority}</p>
-                    <p><strong>Erstellt am:</strong> {ticket.createdAt}</p>
+              return (
+                <article className="ticket-card" key={ticket.id}>
+                  <h3>{ticket.title}</h3>
+
+                  <div className="admin-ticket-meta">
+                    <div className="ticket-info">
+                      <p>
+                        <strong>Kategorie:</strong> {ticket.category}
+                      </p>
+                      <p>
+                        <strong>Priorität:</strong> {ticket.priority}
+                      </p>
+                      <p>
+                        <strong>Erstellt am:</strong> {ticket.createdAt}
+                      </p>
+                    </div>
+
+                    {/* Der Status kann direkt in der jeweiligen Ticketkarte geändert werden. */}
+                    <div className="form-field admin-status-field">
+                      <label htmlFor={`status-${ticket.id}`}>Status</label>
+                      <select
+                        id={`status-${ticket.id}`}
+                        className={`status-select status-${statusClass}`}
+                        value={ticket.status}
+                        onChange={(event) =>
+                          handleStatusChange(ticket.id, event.target.value)
+                        }
+                      >
+                        <option value="Offen">Offen</option>
+                        <option value="In Bearbeitung">In Bearbeitung</option>
+                        <option value="Geschlossen">Geschlossen</option>
+                      </select>
+                    </div>
                   </div>
-                  <div className="form-field admin-status-field">
-                    <label htmlFor={`status-${ticket.id}`}>Status</label>
-                    <select
-                      id={`status-${ticket.id}`}
-                      className={`status-select status-${ticket.status.replaceAll(' ', '-').toLowerCase()}`}
-                      value={ticket.status}
-                      onChange={(event) =>
-                        handleStatusChange(ticket.id, event.target.value)
-                      }
-                    >
-                      <option value="Offen">Offen</option>
-                      <option value="In Bearbeitung">In Bearbeitung</option>
-                      <option value="Geschlossen">Geschlossen</option>
-                    </select>
+
+                  <div className="ticket-description">
+                    <strong>Beschreibung</strong>
+                    <p>{ticket.description}</p>
                   </div>
-                </div>
-
-                <div className="ticket-description">
-                  <strong>Beschreibung</strong>
-                  <p>{ticket.description}</p>
-                </div>
-
-              </article>
-            ))}
+                </article>
+              )
+            })}
           </div>
         )}
       </section>
