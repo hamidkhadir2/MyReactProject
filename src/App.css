@@ -1071,3 +1071,63 @@ a {
 @media (prefers-reduced-motion: reduce) {
   .ticket-card .danger-button-closed { animation: none; }
 }
+
+
+/* Prioritäten auf einen Blick: Farbe und Bewegung zeigen die Dringlichkeit. */
+.priority-text {
+  display: inline-block;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  transition: color 0.25s ease, text-shadow 0.25s ease;
+}
+
+.priority-low {
+  color: #4ade80;
+}
+
+.priority-normal {
+  color: #60a5fa;
+}
+
+.priority-high {
+  color: #fb923c;
+  animation: priorityHighPulse 2.2s ease-in-out infinite;
+}
+
+.priority-urgent {
+  color: #f87171;
+  text-shadow: 0 0 8px #ef444455;
+  animation: priorityUrgentPulse 1.15s ease-in-out infinite;
+}
+
+@keyframes priorityHighPulse {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 0 #fb923c00;
+  }
+  50% {
+    opacity: 0.82;
+    text-shadow: 0 0 7px #fb923c70;
+  }
+}
+
+@keyframes priorityUrgentPulse {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 5px #ef444455;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.72;
+    text-shadow: 0 0 12px #ef4444b0;
+    transform: scale(1.06);
+  }
+}
+
+/* Respektiert die Systemeinstellung gegen Animationen. */
+@media (prefers-reduced-motion: reduce) {
+  .priority-high,
+  .priority-urgent {
+    animation: none;
+  }
+}
