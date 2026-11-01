@@ -3,26 +3,31 @@ import { useState } from 'react'
 function UserDashboard({ tickets, setTickets }) {
   const [showForm, setShowForm] = useState(false)
 
+  // Kontrolliert die Eingaben des Formulars als React-State.
   const [title, setTitle] = useState('')
   const [category, setCategory] = useState('Hardware')
   const [description, setDescription] = useState('')
   const [priority, setPriority] = useState('Normal')
 
-  // Neues Ticket erstellen
+  // Erstellt ein Ticket, ergänzt Datum und Uhrzeit und setzt das Formular zurück.
   function handleSubmit(event) {
     event.preventDefault()
 
     const newTicket = {
       id: Date.now(),
-      title,
+      title: title.trim(),
       category,
-      description,
+      description: description.trim(),
       priority,
       status: 'Offen',
-      createdAt: new Date().toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' }),
+      createdAt: new Date().toLocaleString('de-DE', {
+        dateStyle: 'short',
+        timeStyle: 'short',
+      }),
     }
 
-   setTickets((previousTickets) => [newTicket, ...previousTickets])
+    // Das neue Ticket wird oben in die gemeinsame Ticketliste eingefügt.
+    setTickets((previousTickets) => [newTicket, ...previousTickets])
 
     setTitle('')
     setCategory('Hardware')
@@ -31,7 +36,7 @@ function UserDashboard({ tickets, setTickets }) {
     setShowForm(false)
   }
 
-  // Ticket ohne Bestätigung löschen
+  // Entfernt nur das ausgewählte Ticket aus der gemeinsamen Liste.
   function handleDelete(id) {
     setTickets((previousTickets) =>
       previousTickets.filter((ticket) => ticket.id !== id)
@@ -52,7 +57,7 @@ function UserDashboard({ tickets, setTickets }) {
         <button
           className="primary-button"
           type="button"
-          onClick={() => setShowForm(!showForm)}
+          onClick={() => setShowForm((isOpen) => !isOpen)}
         >
           {showForm ? 'Abbrechen' : '+ Neues Ticket'}
         </button>
@@ -131,55 +136,56 @@ function UserDashboard({ tickets, setTickets }) {
             <h2>Meine Tickets</h2>
             <p>Alle deine Support-Anfragen auf einen Blick.</p>
           </div>
-
           <span className="ticket-count">{tickets.length} Tickets</span>
         </div>
 
         {tickets.length === 0 ? (
-          <p className="welcome-description">
-            Noch keine Tickets vorhanden.
-          </p>
+          <p className="welcome-description">Noch keine Tickets vorhanden.</p>
         ) : (
           <div className="ticket-list">
-            {tickets.map((ticket) => (
-              <article className="ticket-card" key={ticket.id}>
-                <h3>{ticket.title || 'Ohne Titel'}</h3>
+            {tickets.map((ticket) => {
+              const statusClass = ticket.status
+                .replaceAll(' ', '-')
+                .toLowerCase()
 
-                <div className="ticket-info">
-                  <p>
-                    <strong>Kategorie:</strong> {ticket.category}
-                  </p>
+              return (
+                <article className="ticket-card" key={ticket.id}>
+                  <h3>{ticket.title || 'Ohne Titel'}</h3>
 
-                  <p>
-                    <strong>Priorität:</strong> {ticket.priority}
-                  </p>
+                  <div className="ticket-info">
+                    <p>
+                      <strong>Kategorie:</strong> {ticket.category}
+                    </p>
+                    <p>
+                      <strong>Priorität:</strong> {ticket.priority}
+                    </p>
+                    <p>
+                      <strong>Status:</strong>{' '}
+                      <span className={`status-text status-${statusClass}`}>
+                        {ticket.status}
+                      </span>
+                    </p>
+                    <p>
+                      <strong>Erstellt am:</strong> {ticket.createdAt}
+                    </p>
+                  </div>
 
-                  <p>
-                  <strong>Status:</strong>{' '}
-                   <span className={`status-text status-${ticket.status.replaceAll(' ', '-').toLowerCase()}`}>
-                    {ticket.status}
-                    </span>
-                  </p>
+                  <div className="ticket-description">
+                    <strong>Beschreibung</strong>
+                    <p>{ticket.description}</p>
+                  </div>
 
-                  <p>
-                    <strong>Erstellt am:</strong> {ticket.createdAt}
-                  </p>
-                </div>
-
-                <div className="ticket-description">
-                  <strong>Beschreibung</strong>
-                  <p>{ticket.description}</p>
-                </div>
-
-                <button
-                  className={`danger-button ${ticket.status === 'Geschlossen' ? 'danger-button-closed' : ''}`}
-                  type="button"
-                  onClick={() => handleDelete(ticket.id)}
-                >
-                  Löschen
-                </button>
-              </article>
-            ))}
+                  {/* Bei geschlossenen Tickets wird die Löschen-Schaltfläche hervorgehoben. */}
+                  <button
+                    className={`danger-button ${ticket.status === 'Geschlossen' ? 'danger-button-closed' : ''}`}
+                    type="button"
+                    onClick={() => handleDelete(ticket.id)}
+                  >
+                    Löschen
+                  </button>
+                </article>
+              )
+            })}
           </div>
         )}
       </section>
