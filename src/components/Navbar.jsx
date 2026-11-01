@@ -1,28 +1,24 @@
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 function Navbar() {
   return (
     <header className="navbar">
-      <a className="brand" href="/user">
+      {/* Link wechselt die Seite ohne vollständiges Neuladen der Anwendung. */}
+      <Link className="brand" to="/user">
         <span className="brand-icon">IT</span>
         <span>
           Support<span className="brand-highlight">Desk</span>
         </span>
-      </a>
+      </Link>
 
+      {/* NavLink markiert automatisch den aktuell ausgewählten Navigationspunkt. */}
       <nav className="nav-links">
-        <NavLink to="/user">
-          👤 User Dashboard
-        </NavLink>
-
-        <NavLink to="/admin">
-          🛠️ Admin Dashboard
-        </NavLink>
+        <NavLink to="/user">👤 User Dashboard</NavLink>
+        <NavLink to="/admin">🛠️ Admin Dashboard</NavLink>
       </nav>
 
       <div className="user-profile">
         <div className="avatar">HK</div>
-
         <div className="user-info">
           <span className="user-name">IT Support Desk</span>
           <span className="user-role">React Project</span>
