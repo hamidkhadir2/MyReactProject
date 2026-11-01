@@ -37,6 +37,7 @@ function AdminDashboard({ tickets, setTickets }) {
         </div>
 
         <input
+          className="ticket-search"
           type="text"
           placeholder="Tickets suchen..."
           value={search}
@@ -51,10 +52,27 @@ function AdminDashboard({ tickets, setTickets }) {
               <article className="ticket-card" key={ticket.id}>
                 <h3>{ticket.title}</h3>
 
-                <div className="ticket-info">
-                  <p><strong>Kategorie:</strong> {ticket.category}</p>
-                  <p><strong>Priorität:</strong> {ticket.priority}</p>
-                  <p><strong>Erstellt am:</strong> {ticket.createdAt}</p>
+                <div className="admin-ticket-meta">
+                  <div className="ticket-info">
+                    <p><strong>Kategorie:</strong> {ticket.category}</p>
+                    <p><strong>Priorität:</strong> {ticket.priority}</p>
+                    <p><strong>Erstellt am:</strong> {ticket.createdAt}</p>
+                  </div>
+                  <div className="form-field admin-status-field">
+                    <label htmlFor={`status-${ticket.id}`}>Status</label>
+                    <select
+                      id={`status-${ticket.id}`}
+                      className={`status-select status-${ticket.status.replaceAll(' ', '-').toLowerCase()}`}
+                      value={ticket.status}
+                      onChange={(event) =>
+                        handleStatusChange(ticket.id, event.target.value)
+                      }
+                    >
+                      <option value="Offen">Offen</option>
+                      <option value="In Bearbeitung">In Bearbeitung</option>
+                      <option value="Geschlossen">Geschlossen</option>
+                    </select>
+                  </div>
                 </div>
 
                 <div className="ticket-description">
@@ -62,20 +80,6 @@ function AdminDashboard({ tickets, setTickets }) {
                   <p>{ticket.description}</p>
                 </div>
 
-                <div className="form-field">
-                  <label htmlFor={`status-${ticket.id}`}>Status</label>
-                  <select
-                    id={`status-${ticket.id}`}
-                    value={ticket.status}
-                    onChange={(event) =>
-                      handleStatusChange(ticket.id, event.target.value)
-                    }
-                  >
-                    <option value="Offen">Offen</option>
-                    <option value="In Bearbeitung">In Bearbeitung</option>
-                    <option value="Geschlossen">Geschlossen</option>
-                  </select>
-                </div>
               </article>
             ))}
           </div>
