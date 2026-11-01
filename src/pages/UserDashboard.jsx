@@ -20,7 +20,7 @@ function UserDashboard({ tickets, setTickets }) {
       description,
       priority,
       status: 'Offen',
-      createdAt: new Date().toLocaleDateString('de-DE'),
+      createdAt: new Date().toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' }),
     }
 
    setTickets((previousTickets) => [newTicket, ...previousTickets])
@@ -173,7 +173,7 @@ function UserDashboard({ tickets, setTickets }) {
                 </div>
 
                 <button
-                  className="danger-button"
+                  className={`danger-button ${ticket.status === 'Geschlossen' ? 'danger-button-closed' : ''}`}
                   type="button"
                   onClick={() => handleDelete(ticket.id)}
                 >
