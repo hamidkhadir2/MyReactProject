@@ -12,7 +12,7 @@ function AdminDashboard({ tickets, setTickets }) {
   }
 
   const filteredTickets = tickets.filter((ticket) =>
-    ticket.title.toLowerCase().includes(search.toLowerCase())
+    ticket.title.toLowerCase().startsWith(search.trim().toLowerCase())
   )
 
   return (
