@@ -69,7 +69,10 @@ function AdminDashboard({ tickets, setTickets }) {
                         <strong>Kategorie:</strong> {ticket.category}
                       </p>
                       <p>
-                        <strong>Priorität:</strong> {ticket.priority}
+                        <strong>Priorität:</strong>{' '}
+                      <span className={`priority-text priority-${ticket.priority.toLowerCase()}`}>
+                        {ticket.priority}
+                      </span>
                       </p>
                       <p>
                         <strong>Erstellt am:</strong> {ticket.createdAt}
