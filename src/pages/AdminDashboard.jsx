@@ -11,9 +11,13 @@ function AdminDashboard({ tickets, setTickets }) {
     )
   }
 
-  const filteredTickets = tickets.filter((ticket) =>
-    ticket.title.toLowerCase().startsWith(search.trim().toLowerCase())
-  )
+  const filteredTickets = tickets.filter((ticket) => {
+    const searchTerm = search.trim().toLowerCase()
+    const title = (ticket.title ?? '').toLowerCase()
+    const category = (ticket.category ?? '').toLowerCase()
+
+    return title.includes(searchTerm) || category.includes(searchTerm)
+  })
 
   return (
     <main className="main-content">
