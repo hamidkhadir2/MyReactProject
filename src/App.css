@@ -1131,3 +1131,86 @@ a {
     animation: none;
   }
 }
+
+
+/* Kompaktes Ticketformular: auf Desktop sind alle Felder und der Button direkt sichtbar. */
+.ticket-form-container {
+  max-width: 100%;
+  margin-bottom: 24px;
+  padding: 20px 24px;
+}
+
+.ticket-form-container h2 {
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.ticket-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(130px, 0.8fr) minmax(130px, 0.8fr);
+  align-items: end;
+  gap: 14px 18px;
+  max-width: none;
+  margin: 0;
+}
+
+.ticket-form .form-field {
+  max-width: none;
+  min-width: 0;
+}
+
+.ticket-form .form-field:nth-child(4) {
+  grid-column: span 2;
+}
+
+.ticket-form textarea {
+  min-height: 74px;
+  height: 74px;
+}
+
+.ticket-form .form-submit {
+  align-self: end;
+  justify-self: start;
+  margin: 0 0 2px;
+}
+
+/* Auf mittleren Bildschirmen wird das Formular zweispaltig angeordnet. */
+@media (max-width: 900px) {
+  .ticket-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ticket-form .form-field:nth-child(4) {
+    grid-column: 1 / -1;
+  }
+
+  .ticket-form .form-submit {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Auf Smartphones bleiben Felder gut lesbar und werden untereinander angezeigt. */
+@media (max-width: 600px) {
+  .ticket-form-container {
+    padding: 18px;
+  }
+
+  .ticket-form {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .ticket-form .form-field:nth-child(4),
+  .ticket-form .form-submit {
+    grid-column: auto;
+  }
+
+  .ticket-form textarea {
+    height: 90px;
+    min-height: 90px;
+  }
+
+  .ticket-form .form-submit {
+    justify-self: start;
+  }
+}
