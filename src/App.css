@@ -1259,3 +1259,12 @@ a {
     animation-duration: 0.01ms !important;
   }
 }
+
+
+/* Titel geschlossener Tickets im User-Dashboard durchstreichen. */
+.user-dashboard .ticket-card h3.ticket-title-closed {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  text-decoration-color: #f87171;
+  opacity: 0.75;
+}
