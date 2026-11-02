@@ -3,6 +3,17 @@ import { useState } from 'react'
 function AdminDashboard({ tickets, setTickets }) {
   // Der Suchtext wird über React-State kontrolliert.
   const [search, setSearch] = useState('')
+  const [deletingTicketId, setDeletingTicketId] = useState(null)
+
+  // Startet eine längere Löschanimation und blockiert weitere Löschaktionen.
+  function handleDelete(id) {
+    if (deletingTicketId !== null) return
+    setDeletingTicketId(id)
+    window.setTimeout(() => {
+      setTickets((previousTickets) => previousTickets.filter((ticket) => ticket.id !== id))
+      setDeletingTicketId(null)
+    }, 1500)
+  }
 
   // Ändert den Status eines Tickets und lässt alle anderen Daten unverändert.
   function handleStatusChange(id, newStatus) {
@@ -60,13 +71,19 @@ function AdminDashboard({ tickets, setTickets }) {
                 .toLowerCase()
 
               return (
-                <article className="ticket-card" key={ticket.id}>
+                <article className={'ticket-card ' + (deletingTicketId === ticket.id ? 'ticket-card-deleting' : '')} key={ticket.id}>
                   <h3>{ticket.title}</h3>
 
                   <div className="admin-ticket-meta">
                     <div className="ticket-info">
                       <p>
                         <strong>Kategorie:</strong> {ticket.category}
+                      </p>
+                      <p>
+                        <strong>Priorität:</strong>{' '}
+                        <span className={'priority-text priority-' + (ticket.priority ?? 'Normal').toLowerCase()}>
+                          {ticket.priority ?? 'Normal'}
+                        </span>
                       </p>
                       <p>
                         <strong>Erstellt am:</strong> {ticket.createdAt}
@@ -95,6 +112,9 @@ function AdminDashboard({ tickets, setTickets }) {
                     <strong>Beschreibung</strong>
                     <p>{ticket.description}</p>
                   </div>
+                  <button className="danger-button" type="button" disabled={deletingTicketId !== null} onClick={() => handleDelete(ticket.id)}>
+                    {deletingTicketId === ticket.id ? 'Wird gelöscht …' : 'Ticket löschen'}
+                  </button>
                 </article>
               )
             })}
