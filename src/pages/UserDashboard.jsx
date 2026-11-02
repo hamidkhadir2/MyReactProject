@@ -157,7 +157,7 @@ function UserDashboard({ tickets, setTickets }) {
 
               return (
                 <article className={'ticket-card ' + (deletingTicketId === ticket.id ? 'ticket-card-deleting' : '')} key={ticket.id}>
-                  <h3>{ticket.title || 'Ohne Titel'}</h3>
+                  <h3 className={ticket.status === 'Geschlossen' ? 'ticket-title-closed' : ''}>{ticket.title || 'Ohne Titel'}</h3>
 
                   <div className="ticket-info">
                     <p>
