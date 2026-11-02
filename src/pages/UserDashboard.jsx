@@ -37,10 +37,8 @@ function UserDashboard(props) {
     setShowForm(false)
   }
 
-  // Zeigt die Löschanimation 1,5 Sekunden lang und blockiert weitere Lösch-Klicks.
+  // Zeigt die Löschanimation 1,5 Sekunden lang.
   function handleDelete(id) {
-    if (deletingTicketId !== null) return
-
     setDeletingTicketId(id)
     window.setTimeout(() => {
       props.setTickets((previousTickets) =>
@@ -189,7 +187,6 @@ function UserDashboard(props) {
                   <button
                     className={`danger-button ${ticket.status === 'Geschlossen' ? 'danger-button-closed' : ''}`}
                     type="button"
-                    disabled={deletingTicketId !== null}
                     onClick={() => handleDelete(ticket.id)}
                   >
                     {deletingTicketId === ticket.id ? 'Wird gelöscht …' : 'Löschen'}
