@@ -1,11 +1,11 @@
 import { useState } from 'react'
 
-function AdminDashboard({ tickets, setTickets }) {
+function AdminDashboard(props) {
   // Der Suchtext wird über React-State kontrolliert.
   const [search, setSearch] = useState('')
   // Ändert den Status eines Tickets und lässt alle anderen Daten unverändert.
   function handleStatusChange(id, newStatus) {
-    setTickets((previousTickets) =>
+    props.setTickets((previousTickets) =>
       previousTickets.map((ticket) =>
         ticket.id === id ? { ...ticket, status: newStatus } : ticket
       )
@@ -14,7 +14,7 @@ function AdminDashboard({ tickets, setTickets }) {
 
   // Sucht an jeder Stelle im Titel; Groß-/Kleinschreibung wird ignoriert.
   const searchTerm = search.trim().toLowerCase()
-  const filteredTickets = tickets.filter((ticket) =>
+  const filteredTickets = props.tickets.filter((ticket) =>
     (ticket.title ?? '').toLowerCase().includes(searchTerm)
   )
 
@@ -36,7 +36,7 @@ function AdminDashboard({ tickets, setTickets }) {
             <h2>Alle Tickets</h2>
             <p>Tickets ansehen und ihren Status ändern.</p>
           </div>
-          <span className="ticket-count">{tickets.length} Tickets</span>
+          <span className="ticket-count">{props.tickets.length} Tickets</span>
         </div>
 
         {/* Ein einfaches Textfeld zum Suchen nach dem Ticket-Titel. */}

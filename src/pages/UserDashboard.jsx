@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function UserDashboard({ tickets, setTickets }) {
+function UserDashboard(props) {
   const [showForm, setShowForm] = useState(false)
   const [deletingTicketId, setDeletingTicketId] = useState(null)
 
@@ -28,7 +28,7 @@ function UserDashboard({ tickets, setTickets }) {
     }
 
     // Das neue Ticket wird oben in die gemeinsame Ticketliste eingefügt.
-    setTickets((previousTickets) => [newTicket, ...previousTickets])
+    props.setTickets((previousTickets) => [newTicket, ...previousTickets])
 
     setTitle('')
     setCategory('Hardware')
@@ -43,7 +43,7 @@ function UserDashboard({ tickets, setTickets }) {
 
     setDeletingTicketId(id)
     window.setTimeout(() => {
-      setTickets((previousTickets) =>
+      props.setTickets((previousTickets) =>
         previousTickets.filter((ticket) => ticket.id !== id)
       )
       setDeletingTicketId(null)
@@ -143,14 +143,14 @@ function UserDashboard({ tickets, setTickets }) {
             <h2>Meine Tickets</h2>
             <p>Alle deine Support-Anfragen auf einen Blick.</p>
           </div>
-          <span className="ticket-count">{tickets.length} Tickets</span>
+          <span className="ticket-count">{props.tickets.length} Tickets</span>
         </div>
 
-        {tickets.length === 0 ? (
+        {props.tickets.length === 0 ? (
           <p className="welcome-description">Noch keine Tickets vorhanden.</p>
         ) : (
           <div className="ticket-list">
-            {tickets.map((ticket) => {
+            {props.tickets.map((ticket) => {
               const statusClass = ticket.status
                 .replaceAll(' ', '-')
                 .toLowerCase()
