@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 function UserDashboard({ tickets, setTickets }) {
   const [showForm, setShowForm] = useState(false)
+  const [deletingTicketId, setDeletingTicketId] = useState(null)
 
   // Kontrolliert die Eingaben des Formulars als React-State.
   const [title, setTitle] = useState('')
@@ -36,11 +37,17 @@ function UserDashboard({ tickets, setTickets }) {
     setShowForm(false)
   }
 
-  // Entfernt nur das ausgewählte Ticket aus der gemeinsamen Liste.
+  // Zeigt die Löschanimation 1,5 Sekunden lang und blockiert weitere Lösch-Klicks.
   function handleDelete(id) {
-    setTickets((previousTickets) =>
-      previousTickets.filter((ticket) => ticket.id !== id)
-    )
+    if (deletingTicketId !== null) return
+
+    setDeletingTicketId(id)
+    window.setTimeout(() => {
+      setTickets((previousTickets) =>
+        previousTickets.filter((ticket) => ticket.id !== id)
+      )
+      setDeletingTicketId(null)
+    }, 1500)
   }
 
   return (
@@ -149,7 +156,7 @@ function UserDashboard({ tickets, setTickets }) {
                 .toLowerCase()
 
               return (
-                <article className="ticket-card" key={ticket.id}>
+                <article className={'ticket-card ' + (deletingTicketId === ticket.id ? 'ticket-card-deleting' : '')} key={ticket.id}>
                   <h3>{ticket.title || 'Ohne Titel'}</h3>
 
                   <div className="ticket-info">
@@ -182,9 +189,10 @@ function UserDashboard({ tickets, setTickets }) {
                   <button
                     className={`danger-button ${ticket.status === 'Geschlossen' ? 'danger-button-closed' : ''}`}
                     type="button"
+                    disabled={deletingTicketId !== null}
                     onClick={() => handleDelete(ticket.id)}
                   >
-                    Löschen
+                    {deletingTicketId === ticket.id ? 'Wird gelöscht …' : 'Löschen'}
                   </button>
                 </article>
               )
