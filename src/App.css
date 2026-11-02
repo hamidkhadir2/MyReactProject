@@ -1214,3 +1214,48 @@ a {
     justify-self: start;
   }
 }
+
+
+/* Längere Löschanimation: währenddessen sind weitere Lösch-Klicks gesperrt. */
+.ticket-card-deleting {
+  pointer-events: none;
+  transform-origin: center;
+  animation: ticketDeleteExit 1.5s ease-in-out forwards !important;
+  border-color: #ef4444 !important;
+}
+
+.ticket-card .danger-button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+@keyframes ticketDeleteExit {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  35% {
+    opacity: 1;
+    transform: translateX(-5px) scale(0.99);
+    box-shadow: 0 0 18px #ef444455;
+  }
+  65% {
+    opacity: 0.65;
+    transform: translateX(8px) scale(0.98);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(24px) scale(0.96);
+    max-height: 0;
+    margin-top: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticket-card-deleting {
+    animation-duration: 0.01ms !important;
+  }
+}
