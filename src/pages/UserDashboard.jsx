@@ -26,8 +26,11 @@ function UserDashboard(props) {
       }),
     }
 
-    // Das neue Ticket wird oben in die gemeinsame Ticketliste eingefügt.
-    props.setTickets((previousTickets) => [newTicket, ...previousTickets])
+    // Sendet eine Action an den Reducer, um das neue Ticket hinzuzufügen.
+    props.dispatch({
+      type: 'ADD_TICKET',
+      payload: newTicket,
+    })
 
     setTitle('')
     setCategory('Hardware')
@@ -43,9 +46,10 @@ function UserDashboard(props) {
     )
 
     if (confirmed) {
-      props.setTickets((previousTickets) =>
-        previousTickets.filter((ticket) => ticket.id !== id)
-      )
+      props.dispatch({
+        type: 'DELETE_TICKET',
+        payload: id,
+      })
     }
   }
 
@@ -156,7 +160,9 @@ function UserDashboard(props) {
 
               return (
                 <article className="ticket-card" key={ticket.id}>
-                  <h3 className={ticket.status === 'Geschlossen' ? 'ticket-title-closed' : ''}>{ticket.title || 'Ohne Titel'}</h3>
+                  <h3 className={ticket.status === 'Geschlossen' ? 'ticket-title-closed' : ''}>
+                    {ticket.title || 'Ohne Titel'}
+                  </h3>
 
                   <div className="ticket-info">
                     <p>
@@ -164,8 +170,8 @@ function UserDashboard(props) {
                     </p>
                     <p>
                       <strong>Priorität:</strong>{' '}
-                      <span className={`priority-text priority-${ticket.priority.toLowerCase()}`}>
-                        {ticket.priority}
+                      <span className={`priority-text priority-${(ticket.priority ?? 'Normal').toLowerCase()}`}>
+                        {ticket.priority ?? 'Normal'}
                       </span>
                     </p>
                     <p>
