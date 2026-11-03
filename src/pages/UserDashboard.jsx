@@ -2,7 +2,6 @@ import { useState } from 'react'
 
 function UserDashboard(props) {
   const [showForm, setShowForm] = useState(false)
-  const [deletingTicketId, setDeletingTicketId] = useState(null)
 
   // Kontrolliert die Eingaben des Formulars als React-State.
   const [title, setTitle] = useState('')
@@ -37,15 +36,17 @@ function UserDashboard(props) {
     setShowForm(false)
   }
 
-  // Zeigt die Löschanimation 1,5 Sekunden lang.
+  // Fragt vor dem Löschen eines Tickets nach einer Bestätigung.
   function handleDelete(id) {
-    setDeletingTicketId(id)
-    window.setTimeout(() => {
+    const confirmed = window.confirm(
+      'Möchtest du dieses Ticket wirklich löschen?'
+    )
+
+    if (confirmed) {
       props.setTickets((previousTickets) =>
         previousTickets.filter((ticket) => ticket.id !== id)
       )
-      setDeletingTicketId(null)
-    }, 1500)
+    }
   }
 
   return (
@@ -154,7 +155,7 @@ function UserDashboard(props) {
                 .toLowerCase()
 
               return (
-                <article className={'ticket-card ' + (deletingTicketId === ticket.id ? 'ticket-card-deleting' : '')} key={ticket.id}>
+                <article className="ticket-card" key={ticket.id}>
                   <h3 className={ticket.status === 'Geschlossen' ? 'ticket-title-closed' : ''}>{ticket.title || 'Ohne Titel'}</h3>
 
                   <div className="ticket-info">
@@ -189,7 +190,7 @@ function UserDashboard(props) {
                     type="button"
                     onClick={() => handleDelete(ticket.id)}
                   >
-                    {deletingTicketId === ticket.id ? 'Wird gelöscht …' : 'Löschen'}
+                    Löschen
                   </button>
                 </article>
               )
