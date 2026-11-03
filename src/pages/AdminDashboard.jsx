@@ -3,13 +3,16 @@ import { useState } from 'react'
 function AdminDashboard(props) {
   // Der Suchtext wird über React-State kontrolliert.
   const [search, setSearch] = useState('')
-  // Ändert den Status eines Tickets und lässt alle anderen Daten unverändert.
+
+  // Ändert den Status eines Tickets über eine Action an den Reducer.
   function handleStatusChange(id, newStatus) {
-    props.setTickets((previousTickets) =>
-      previousTickets.map((ticket) =>
-        ticket.id === id ? { ...ticket, status: newStatus } : ticket
-      )
-    )
+    props.dispatch({
+      type: 'UPDATE_STATUS',
+      payload: {
+        id: id,
+        newStatus: newStatus,
+      },
+    })
   }
 
   // Sucht an jeder Stelle im Titel; Groß-/Kleinschreibung wird ignoriert.
@@ -60,7 +63,7 @@ function AdminDashboard(props) {
 
               return (
                 <article className="ticket-card" key={ticket.id}>
-                  <h3>{ticket.title}</h3>
+                  <h3>{ticket.title || 'Ohne Titel'}</h3>
 
                   <div className="admin-ticket-meta">
                     <div className="ticket-info">
@@ -69,7 +72,7 @@ function AdminDashboard(props) {
                       </p>
                       <p>
                         <strong>Priorität:</strong>{' '}
-                        <span className={'priority-text priority-' + (ticket.priority ?? 'Normal').toLowerCase()}>
+                        <span className={`priority-text priority-${(ticket.priority ?? 'Normal').toLowerCase()}`}>
                           {ticket.priority ?? 'Normal'}
                         </span>
                       </p>
