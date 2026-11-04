@@ -16,7 +16,7 @@ function UserDashboard(props) {
     const newTicket = {
       id: Date.now(),
       title: title.trim(),
-      category,
+      category :category,
       description: description.trim(),
       priority,
       status: 'Offen',
