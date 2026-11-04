@@ -56,7 +56,7 @@ function loadTickets(defaultTickets) {
   try {
     const savedTickets = localStorage.getItem('tickets')
 
-    if (savedTickets) {
+    if (savedTickets) { 
       const parsedTickets = JSON.parse(savedTickets)
 
       if (Array.isArray(parsedTickets)) {
@@ -70,7 +70,7 @@ function loadTickets(defaultTickets) {
   return defaultTickets
 }
 
-// Verwaltet alle Änderungen an der gemeinsamen Ticketliste.
+
 function ticketReducer(state, action) {
   switch (action.type) {
     case 'ADD_TICKET':
@@ -92,8 +92,7 @@ function ticketReducer(state, action) {
 }
 
 function App() {
-  // useReducer verwaltet die gemeinsame Ticketliste.
-  // loadTickets wird nur zur Initialisierung des States aufgerufen.
+ 
   const [tickets, dispatch] = useReducer(
     ticketReducer,
     initialTickets,
